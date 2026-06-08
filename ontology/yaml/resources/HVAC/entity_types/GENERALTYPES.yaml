@@ -46,6 +46,9 @@ FCU:
   is_abstract: true
   opt_uses:
   - return_air_temperature_sensor
+  - low_return_air_temperature_alarm
+  - high_return_air_temperature_alarm
+  - failed_return_air_temperature_alarm
   - return_air_relative_humidity_sensor
   - discharge_air_temperature_sensor
   - failed_communication_alarm
@@ -70,19 +73,11 @@ AHU:
   - failed_communication_alarm
   - smoke_alarm
   - emergency_alarm
+  - filter_alarm
 
 HX:
   guid: "9aa0dd1a-851c-4d4e-90da-6804c4f8b9f9"
   description: "Tag for heat exchangers. Heat exchangers facilitate heat transfer between two media (water, air, refrigerant, etc.)."
-  is_abstract: true
-  opt_uses:
-  - failed_communication_alarm
-  implements:
-  - EQUIPMENT
-
-PMP:
-  guid: "0984adbd-943c-4bf8-9b4e-af51c24c2736"
-  description: "Tag for pumps. Pumps move liquid (water, glycol, liquid CO2, etc.) from one part of a system to another."
   is_abstract: true
   opt_uses:
   - failed_communication_alarm
@@ -106,6 +101,9 @@ MAU:
   - failed_communication_alarm
   - failed_alarm
   - emergency_alarm
+  - smoke_alarm
+  - filter_alarm
+  - run_mode
   implements:
   - EQUIPMENT
 
@@ -289,16 +287,6 @@ HUM:
   - failed_communication_alarm
   implements:
   - EQUIPMENT
-
-VLV:
-  guid: "3b576a44-4ab8-4e9b-ad8f-65f1b9f08238"
-  description: "Tag for valves. Valves are devices which control the flow of water."
-  is_abstract: true
-  opt_uses:
-  - failed_communication_alarm
-  implements:
-  - EQUIPMENT
-
 RSR:
   guid: "95d5ac12-326d-45d3-94f2-0fac854af027"
   description: "A generic distribution riser."
@@ -401,6 +389,10 @@ DOAS:
   is_abstract: true
   opt_uses:
   - failed_communication_alarm
+  - smoke_alarm
+  - filter_alarm
+  - run_mode
+  - outside_air_temperature_sensor
   implements:
   - EQUIPMENT
 
@@ -448,4 +440,27 @@ PCU:
   implements:
   - EQUIPMENT
   opt_uses:
+  - failed_communication_alarm
+
+HOOD:
+  guid: "da347c83-a433-4df7-b6d4-26f416494a8c"
+  description: "Tag for a hood. Hoods are typically used in kitchen or lab spaces to exhaust air and detect smoke."
+  is_abstract: true
+  implements:
+  - EQUIPMENT
+  opt_uses:
+  - failed_communication_alarm
+  - fire_alarm
+
+CHGS:
+  guid: "a61071e1-d42c-48cd-b5a4-1a552bda69ab"
+  description: "Tag for glycol systems. This tag represents the system itself but not other distinct equipment in the system; chillers and pumps should be modeled as their own standalone entities."
+  is_abstract: true
+  implements:
+  - EQUIPMENT
+  opt_uses:
+  - thermal_power_capacity
+  - differential_pressure_specification
+  - flowrate_requirement
+  - cooling_request_count
   - failed_communication_alarm

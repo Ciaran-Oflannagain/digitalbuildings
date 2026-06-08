@@ -8,29 +8,31 @@ on:
     branches: [ master ]
     paths:
       - ontology/yaml/**
+      - .github/workflows/OntologyValidator.yml
 
   pull_request:
     branches: [ master ]
     paths:
       - ontology/yaml/**
- 
+      - .github/workflows/OntologyValidator.yml
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout the branch the PR is coming from if PR
       if: github.event_name == 'pull_request'
-      uses: actions/checkout@v3
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
       with:
         repository: ${{ github.event.pull_request.head.repo.full_name }}
         ref: ${{ github.event.pull_request.head.ref }}
 
     - name: Checkout head if push
       if: github.event_name == 'push'
-      uses: actions/checkout@v3
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
 
     - name: Set up Python 3.11
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
       with:
         python-version: '3.11'
 
@@ -44,7 +46,7 @@ jobs:
     - name: Get modified entity type files
       id: changed-entity-type-files
       if: github.event_name == 'push'
-      uses: tj-actions/changed-files@v41
+      uses: tj-actions/changed-files@24d32ffd492484c1d75e0c0b894501ddb9d30d62  # v47.0.2
       with:
         files: '**/ontology/yaml/**/entity_types/*.yaml'
 
@@ -59,7 +61,7 @@ jobs:
 
     - name: Commit files changed by types GUID generator
       if: github.event_name == 'push' && steps.changed-entity-type-files.outputs.any_changed == 'true'
-      uses: EndBug/add-and-commit@v9
+      uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # 9.1.4
       with:
         author_name: db-robot
         author_email: db-robot@google.com
@@ -70,7 +72,7 @@ jobs:
       run: |
         python validator.py --original=../../../../ontology/yaml/resources  --interactive=False
       working-directory: ./tools/validators/ontology_validator/yamlformat
-      
+
     ### End of type guid generation ###
 
     - name: Run ontology YAML validator without type guid checks if PR
